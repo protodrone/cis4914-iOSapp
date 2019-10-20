@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddEditObservationTableViewController: UITableViewController {
+class AddEditObservationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +32,25 @@ class AddEditObservationTableViewController: UITableViewController {
             genusTextField.text = observation.genus
             speciesTextField.text = observation.species
             notesTextField.text = observation.notes
+            if let imageUUIDString = observation.imageUUIDString {
+                let fileURL = imgageDirectoryURL.appendingPathComponent(imageUUIDString).appendingPathExtension("png")
+                do {
+                    let imageData = try Data(contentsOf: fileURL)
+                    imageView.image = UIImage(data: imageData)
+                    imageView.transform = CGAffineTransform(rotationAngle: (180.0 * .pi/2) / 180.0)
+                    
+                } catch {
+                    print("Error loading image : \(error)")
+                    print("fileURL : \(fileURL)")
+                }
+            }
         }
         
         updateSaveButtonState()
     }
     
     var observation: Observation?
+    var imageURLHolder: String = ""
     
     @IBOutlet weak var observationNameTextField: UITextField!
     @IBOutlet weak var gpsDatumTextField: UITextField!
@@ -47,6 +60,7 @@ class AddEditObservationTableViewController: UITableViewController {
     @IBOutlet weak var genusTextField: UITextField!
     @IBOutlet weak var speciesTextField: UITextField!
     @IBOutlet weak var notesTextField: UITextView!
+    @IBOutlet weak var imageView: UIImageView!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -58,12 +72,69 @@ class AddEditObservationTableViewController: UITableViewController {
         updateSaveButtonState()
     }
        
-   func updateSaveButtonState() {
+    func updateSaveButtonState() {
        let observationNameText = observationNameTextField.text ?? ""
        saveButton.isEnabled = !observationNameText.isEmpty
-   }
+    }
+    
+    @IBAction func imageViewTapped(_ sender: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
+        let alertController = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { action in
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true, completion: nil) })
+            alertController.addAction(cameraAction)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default, handler: { action in imagePicker.sourceType = .photoLibrary
+                self.present(imagePicker, animated: true, completion: nil)
+            })
+            alertController.addAction(photoLibraryAction)
+        }
+        
+        // alertController.popoverPresentationController?.sourceView = sender
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        imageView.image = selectedImage
+        
+        // Save image to file
+        let uuid = UUID()
+        let imageURL = imgageDirectoryURL.appendingPathComponent(uuid.uuidString).appendingPathExtension("png")
+        if let imageData = imageView.image?.pngData() {
+            try? imageData.write(to: imageURL, options: .atomic)
+            imageURLHolder = uuid.uuidString
+            print("Image written to : \(imageURL)")
+        } else {
+            print("Error converting to png data.")
+        }
+                
+        
+        
+        // Fill in code to detect and delete previous image
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 
     // MARK: - Table view data source
+    
+    var imgageDirectoryURL: URL {
+        get {
+            let imageDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            return imageDirectoryURL
+        }
+        
+    }
     /* Static
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -128,7 +199,6 @@ class AddEditObservationTableViewController: UITableViewController {
             var gpsDatum: String?
             if let gps = gpsDatumTextField.text {
                 gpsDatum = gps
-                print("gpsDatum \(gpsDatum!) end")
             }
             var lattitude: Float?
             if let lat = lattitudeTextField.text {
@@ -154,7 +224,11 @@ class AddEditObservationTableViewController: UITableViewController {
             if let notesText = notesTextField.text {
                 notes = notesText
             }
-            observation = Observation(name: observationName, gpsDatum: gpsDatum, commonName: commonName, genus: genus, species: species, notes: notes, lattitude: lattitude, longitude: longitude)
+            var imageUUIDString: String?
+            if !imageURLHolder.isEmpty {
+                imageUUIDString = imageURLHolder
+            }
+            observation = Observation(name: observationName, gpsDatum: gpsDatum, commonName: commonName, genus: genus, species: species, notes: notes, lattitude: lattitude, longitude: longitude, imageUUIDString: imageUUIDString)
         }
     }
 

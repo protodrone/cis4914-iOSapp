@@ -70,6 +70,9 @@ class ObservationsTableViewController: UITableViewController {
             batches[batchIndex].observations.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             Batch.saveToFile(batches: batches)
+            
+            // ADD PICUTRE DELETE CODE
+            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
