@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class AddEditObservationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddEditObservationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,10 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.requestWhenInUseAuthorization()
         
         if let observation = observation {
             observationNameTextField.text = observation.name
@@ -37,7 +42,10 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
                 do {
                     let imageData = try Data(contentsOf: fileURL)
                     imageView.image = UIImage(data: imageData)
+                    imageURLHolder = fileURL.lastPathComponent.replacingOccurrences(of: ".png", with: "")
+                    print("viewDidLoad imageURLHolder : \(imageURLHolder)")
                     imageView.transform = CGAffineTransform(rotationAngle: (180.0 * .pi/2) / 180.0)
+                    print("Transform called.")
                     
                 } catch {
                     print("Error loading image : \(error)")
@@ -48,9 +56,11 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
         
         updateSaveButtonState()
     }
-    
+    //let locationManager = CLLocationManager()
     var observation: Observation?
     var imageURLHolder: String = ""
+    var imageNeedsTransform: Bool = false
+    var locationManager: CLLocationManager?
     
     @IBOutlet weak var observationNameTextField: UITextField!
     @IBOutlet weak var gpsDatumTextField: UITextField!
@@ -61,6 +71,7 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
     @IBOutlet weak var speciesTextField: UITextField!
     @IBOutlet weak var notesTextField: UITextView!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var locationImageView: UIImageView!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -77,7 +88,37 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
        saveButton.isEnabled = !observationNameText.isEmpty
     }
     
+    @IBAction func locationTapped(_ sender: Any) {
+        print("location tapped")
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager?.startUpdatingLocation()
+            print("location services updating location")
+        } else {
+            print("location services not enabled")
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("location delegate called")
+        guard let location: CLLocationCoordinate2D = manager.location?.coordinate,
+             let lattitude = lattitudeTextField.text, let longitude = longitudeTextField.text else { return }
+        print("through guard")
+        if lattitude.isEmpty && longitude.isEmpty {
+            lattitudeTextField.text = String(location.latitude)
+            longitudeTextField.text = String(location.longitude)
+            gpsDatumTextField.text = "WGS84" // According to Apple docs, all iPhones are fixed to WGS84
+            print("lat and long detected as empty")
+        } else {
+            print("lat and long NOT empty")
+        }
+        locationManager?.stopUpdatingLocation()
+    }
+    
     @IBAction func imageViewTapped(_ sender: Any) {
+        if let imageIsSymbol = imageView.image?.isSymbolImage {
+            imageNeedsTransform = !imageIsSymbol
+        }
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
@@ -107,6 +148,9 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.originalImage] as? UIImage else { return }
         imageView.image = selectedImage
+        //if !imageNeedsTransform {
+            //imageView.transform = CGAffineTransform(rotationAngle: (180.0 * .pi/2) / 180.0)
+        //}
         
         // Save image to file
         let uuid = UUID()
@@ -115,6 +159,7 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
             try? imageData.write(to: imageURL, options: .atomic)
             imageURLHolder = uuid.uuidString
             print("Image written to : \(imageURL)")
+            print("imageURLHolder : \(imageURLHolder)")
         } else {
             print("Error converting to png data.")
         }
