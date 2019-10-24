@@ -22,6 +22,9 @@ class CECTableViewController: UITableViewController {
         if let batchesDidLoad = Batch.loadFromFile() {
             self.batches = batchesDidLoad
         }
+        if let webConfig = WebServiceConfig.loadFromFile() {
+            self.webConfig = webConfig
+        }
     }
     
     @IBAction func editButtonTapped(_ sender: Any) {
@@ -32,6 +35,7 @@ class CECTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     var batches: [Batch] = [Batch]()
+    var webConfig: WebServiceConfig?
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -110,18 +114,31 @@ class CECTableViewController: UITableViewController {
             observationTableViewController.batchIndex = indexPath.row
             observationTableViewController.batches = batches
         }
+        
+        if segue.identifier == "webConfig" {
+            let webConfigViewController = segue.destination as! WebServiceConfigViewController
+            webConfigViewController.webConfig = webConfig
+        }
+        
     }
     
     @IBAction func unwindToCECTableViewcontroller(segue: UIStoryboardSegue) {
-        guard segue.identifier == "saveUnwind",
-            let sourceViewController = segue.source as? AddBatchTableViewController,
-            let batch = sourceViewController.batch else { return }
+        if segue.identifier == "saveUnwind" {
+            guard let sourceViewController = segue.source as? AddBatchTableViewController,
+                let batch = sourceViewController.batch else { return }
+            
+            let newIndexPath = IndexPath(row: batches.count, section: 0)
+            batches.append(batch)
+            tableView.insertRows(at: [newIndexPath], with: .fade)
+            Batch.saveToFile(batches: batches)
+        }
         
-        let newIndexPath = IndexPath(row: batches.count, section: 0)
-        batches.append(batch)
-        tableView.insertRows(at: [newIndexPath], with: .fade)
-        Batch.saveToFile(batches: batches)
-        
+        if segue.identifier == "saveWebConfig" {
+            guard let sourceViewController = segue.source as? WebServiceConfigViewController,
+                let webConfig = sourceViewController.webConfig else { return }
+            WebServiceConfig.saveToFile(WebServiceConfig: webConfig)
+            self.webConfig = webConfig
+        }
     }
 
 }
