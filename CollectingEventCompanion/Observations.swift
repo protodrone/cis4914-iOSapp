@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Observation: Codable {
     var name: String
@@ -17,6 +18,7 @@ class Observation: Codable {
     var notes: String?
     private var validatedLattitude: Float?
     private var validatedLongitude: Float?
+    var imageUUIDString: String?
     
     var lattitude: Float? {
         get {
@@ -49,7 +51,7 @@ class Observation: Codable {
         }
     }
     
-    init(name: String, gpsDatum: String?, commonName: String?, genus: String?, species: String?, notes: String?, lattitude: Float?, longitude: Float?) {
+    init(name: String, gpsDatum: String?, commonName: String?, genus: String?, species: String?, notes: String?, lattitude: Float?, longitude: Float?, imageUUIDString: String?) {
         self.name = name
         self.gpsDatum = gpsDatum
         self.commonName = commonName
@@ -58,5 +60,6 @@ class Observation: Codable {
         self.notes = notes
         self.lattitude = lattitude
         self.longitude = longitude
+        self.imageUUIDString = imageUUIDString
     }
 }

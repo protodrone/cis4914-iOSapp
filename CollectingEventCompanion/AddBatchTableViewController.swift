@@ -42,6 +42,24 @@ class AddBatchTableViewController: UITableViewController {
         saveButton.isEnabled = !batchNameText.isEmpty
     }
     
+    @IBAction func showFilesButtonTapped(_ sender: Any) {
+        listPNGFiles()
+    }
+    
+    func listPNGFiles() {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        do {
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+            let pngFiles = directoryContents.filter{ $0.pathExtension == "png" }
+            let pngFileNames = pngFiles.map{ $0.deletingPathExtension().lastPathComponent }
+            print(pngFileNames)
+            print("\(pngFileNames.count) PNG files")
+        }
+        catch {
+            print(error)
+        }
+    }
+    
     // MARK: - Table view data source
     /*
     override func numberOfSections(in tableView: UITableView) -> Int {

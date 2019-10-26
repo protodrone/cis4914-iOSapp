@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class AddEditObservationTableViewController: UITableViewController {
+class AddEditObservationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,10 @@ class AddEditObservationTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.requestWhenInUseAuthorization()
         
         if let observation = observation {
             observationNameTextField.text = observation.name
@@ -32,12 +37,30 @@ class AddEditObservationTableViewController: UITableViewController {
             genusTextField.text = observation.genus
             speciesTextField.text = observation.species
             notesTextField.text = observation.notes
+            if let imageUUIDString = observation.imageUUIDString {
+                let fileURL = imgageDirectoryURL.appendingPathComponent(imageUUIDString).appendingPathExtension("png")
+                do {
+                    let imageData = try Data(contentsOf: fileURL)
+                    imageView.image = UIImage(data: imageData)
+                    imageURLHolder = fileURL.lastPathComponent.replacingOccurrences(of: ".png", with: "")
+                    print("viewDidLoad imageURLHolder : \(imageURLHolder)")
+                    imageView.transform = CGAffineTransform(rotationAngle: (180.0 * .pi/2) / 180.0)
+                    print("Transform called.")
+                    
+                } catch {
+                    print("Error loading image : \(error)")
+                    print("fileURL : \(fileURL)")
+                }
+            }
         }
         
         updateSaveButtonState()
     }
     
     var observation: Observation?
+    var imageURLHolder: String = ""
+    var imageNeedsTransform: Bool = false
+    var locationManager: CLLocationManager?
     
     @IBOutlet weak var observationNameTextField: UITextField!
     @IBOutlet weak var gpsDatumTextField: UITextField!
@@ -47,6 +70,8 @@ class AddEditObservationTableViewController: UITableViewController {
     @IBOutlet weak var genusTextField: UITextField!
     @IBOutlet weak var speciesTextField: UITextField!
     @IBOutlet weak var notesTextField: UITextView!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var locationImageView: UIImageView!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -58,12 +83,111 @@ class AddEditObservationTableViewController: UITableViewController {
         updateSaveButtonState()
     }
        
-   func updateSaveButtonState() {
+    func updateSaveButtonState() {
        let observationNameText = observationNameTextField.text ?? ""
        saveButton.isEnabled = !observationNameText.isEmpty
-   }
+    }
+    
+    @IBAction func locationTapped(_ sender: Any) {
+        print("location tapped")
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager?.startUpdatingLocation()
+            print("location services updating location")
+        } else {
+            print("location services not enabled")
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("location delegate called")
+        guard let location: CLLocationCoordinate2D = manager.location?.coordinate,
+             let lattitude = lattitudeTextField.text, let longitude = longitudeTextField.text else { return }
+        print("through guard")
+        if lattitude.isEmpty && longitude.isEmpty {
+            lattitudeTextField.text = String(location.latitude)
+            longitudeTextField.text = String(location.longitude)
+            gpsDatumTextField.text = "WGS84" // According to Apple docs, all iPhones are fixed to WGS84
+            print("lat and long detected as empty")
+        } else {
+            print("lat and long NOT empty")
+        }
+        locationManager?.stopUpdatingLocation()
+    }
+    
+    @IBAction func imageViewTapped(_ sender: Any) {
+        if let imageIsSymbol = imageView.image?.isSymbolImage {
+            imageNeedsTransform = !imageIsSymbol
+        }
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
+        let alertController = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { action in
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true, completion: nil) })
+            alertController.addAction(cameraAction)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default, handler: { action in imagePicker.sourceType = .photoLibrary
+                self.present(imagePicker, animated: true, completion: nil)
+            })
+            alertController.addAction(photoLibraryAction)
+        }
+        
+        // alertController.popoverPresentationController?.sourceView = sender
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        imageView.image = selectedImage
+        //if !imageNeedsTransform {
+            //imageView.transform = CGAffineTransform(rotationAngle: (180.0 * .pi/2) / 180.0)
+        //}
+        
+        // Save image to file
+        let uuid = UUID()
+        let imageURL = imgageDirectoryURL.appendingPathComponent(uuid.uuidString).appendingPathExtension("png")
+        if let imageData = imageView.image?.pngData() {
+            try? imageData.write(to: imageURL, options: .atomic)
+            // Delete existing image if present.
+            if !imageURLHolder.isEmpty {
+                let existingImageURL = imgageDirectoryURL.appendingPathComponent(imageURLHolder).appendingPathExtension("png")
+                let fileManager = FileManager.default
+                do {
+                    try fileManager.removeItem(at: existingImageURL)
+                    print("deleted : \(existingImageURL)")
+                }
+                catch {
+                    print(error)
+                }
+            }
+            imageURLHolder = uuid.uuidString
+            print("Image written to : \(imageURL)")
+            print("imageURLHolder : \(imageURLHolder)")
+        } else {
+            print("Error converting to png data.")
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 
     // MARK: - Table view data source
+    
+    var imgageDirectoryURL: URL {
+        get {
+            let imageDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            return imageDirectoryURL
+        }
+        
+    }
     /* Static
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -128,7 +252,6 @@ class AddEditObservationTableViewController: UITableViewController {
             var gpsDatum: String?
             if let gps = gpsDatumTextField.text {
                 gpsDatum = gps
-                print("gpsDatum \(gpsDatum!) end")
             }
             var lattitude: Float?
             if let lat = lattitudeTextField.text {
@@ -154,7 +277,11 @@ class AddEditObservationTableViewController: UITableViewController {
             if let notesText = notesTextField.text {
                 notes = notesText
             }
-            observation = Observation(name: observationName, gpsDatum: gpsDatum, commonName: commonName, genus: genus, species: species, notes: notes, lattitude: lattitude, longitude: longitude)
+            var imageUUIDString: String?
+            if !imageURLHolder.isEmpty {
+                imageUUIDString = imageURLHolder
+            }
+            observation = Observation(name: observationName, gpsDatum: gpsDatum, commonName: commonName, genus: genus, species: species, notes: notes, lattitude: lattitude, longitude: longitude, imageUUIDString: imageUUIDString)
         }
     }
 

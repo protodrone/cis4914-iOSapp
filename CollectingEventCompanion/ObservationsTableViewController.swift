@@ -64,9 +64,29 @@ class ObservationsTableViewController: UITableViewController {
         return true
     }
     */
-
+    
+    var imgageDirectoryURL: URL {
+        get {
+            let imageDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            return imageDirectoryURL
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            if let image = batches[batchIndex].observations[indexPath.row].imageUUIDString {
+                if !image.isEmpty {
+                    let imageURL = imgageDirectoryURL.appendingPathComponent(image).appendingPathExtension("png")
+                    let fileManager = FileManager.default
+                    do {
+                        try fileManager.removeItem(at: imageURL)
+                        print("deleted image : \(imageURL)")
+                    }
+                    catch {
+                        print(error)
+                    }
+                }
+            }
             batches[batchIndex].observations.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             Batch.saveToFile(batches: batches)
