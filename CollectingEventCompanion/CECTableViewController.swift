@@ -36,6 +36,13 @@ class CECTableViewController: UITableViewController {
     
     var batches: [Batch] = [Batch]()
     var webConfig: WebServiceConfig?
+    
+    var imgageDirectoryURL: URL {
+        get {
+            let imageDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            return imageDirectoryURL
+        }
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -68,6 +75,18 @@ class CECTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            for observation in batches[indexPath.row].observations {
+                if let imageName = observation.imageUUIDString {
+                    let imageURL = imgageDirectoryURL.appendingPathComponent(imageName).appendingPathExtension("png")
+                    let fileManager = FileManager.default
+                    do {
+                        try fileManager.removeItem(at: imageURL)
+                        print("deleted image : \(imageURL)")
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
             batches.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             Batch.saveToFile(batches: batches)
