@@ -56,7 +56,7 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
         
         updateSaveButtonState()
     }
-    //let locationManager = CLLocationManager()
+    
     var observation: Observation?
     var imageURLHolder: String = ""
     var imageNeedsTransform: Bool = false
@@ -157,16 +157,24 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
         let imageURL = imgageDirectoryURL.appendingPathComponent(uuid.uuidString).appendingPathExtension("png")
         if let imageData = imageView.image?.pngData() {
             try? imageData.write(to: imageURL, options: .atomic)
+            // Delete existing image if present.
+            if !imageURLHolder.isEmpty {
+                let existingImageURL = imgageDirectoryURL.appendingPathComponent(imageURLHolder).appendingPathExtension("png")
+                let fileManager = FileManager.default
+                do {
+                    try fileManager.removeItem(at: existingImageURL)
+                    print("deleted : \(existingImageURL)")
+                }
+                catch {
+                    print(error)
+                }
+            }
             imageURLHolder = uuid.uuidString
             print("Image written to : \(imageURL)")
             print("imageURLHolder : \(imageURLHolder)")
         } else {
             print("Error converting to png data.")
         }
-                
-        
-        
-        // Fill in code to detect and delete previous image
         self.dismiss(animated: true, completion: nil)
     }
     
