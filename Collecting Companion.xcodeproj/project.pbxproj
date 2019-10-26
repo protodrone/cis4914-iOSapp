@@ -7,16 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0731AA02355522A001A29ED /* Observations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0731A9F2355522A001A29ED /* Observations.swift */; };
+		B0BF5FBF235B8912001F50E3 /* AddBatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF5FBE235B8912001F50E3 /* AddBatchTableViewController.swift */; };
+		B0BF5FC1235BB381001F50E3 /* ObservationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */; };
+		B0CDE8C423569B4100611B58 /* Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CDE8C323569B4100611B58 /* Batch.swift */; };
+		B0D6AE8F235CCE90005310FA /* AddEditObservationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6AE8E235CCE90005310FA /* AddEditObservationTableViewController.swift */; };
+		B0E41DDD235FD3230071605D /* WebServiceConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E41DDC235FD3230071605D /* WebServiceConfigViewController.swift */; };
+		B0E41DDF235FD3B20071605D /* WebServiceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E41DDE235FD3B20071605D /* WebServiceConfig.swift */; };
 		B0EF22232353F3F10070365D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EF22222353F3F10070365D /* AppDelegate.swift */; };
 		B0EF22252353F3F10070365D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EF22242353F3F10070365D /* SceneDelegate.swift */; };
 		B0EF22272353F3F10070365D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EF22262353F3F10070365D /* ViewController.swift */; };
 		B0EF222A2353F3F10070365D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0EF22282353F3F10070365D /* Main.storyboard */; };
 		B0EF222C2353F3F20070365D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0EF222B2353F3F20070365D /* Assets.xcassets */; };
 		B0EF222F2353F3F20070365D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0EF222D2353F3F20070365D /* LaunchScreen.storyboard */; };
+		B0EF22372353FFDB0070365D /* CECTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EF22362353FFDB0070365D /* CECTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B0EF221F2353F3F10070365D /* CollectingEventCompanio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectingEventCompanio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0731A9F2355522A001A29ED /* Observations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observations.swift; sourceTree = "<group>"; };
+		B0BF5FBE235B8912001F50E3 /* AddBatchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBatchTableViewController.swift; sourceTree = "<group>"; };
+		B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsTableViewController.swift; sourceTree = "<group>"; };
+		B0CDE8C323569B4100611B58 /* Batch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Batch.swift; sourceTree = "<group>"; };
+		B0D6AE8E235CCE90005310FA /* AddEditObservationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditObservationTableViewController.swift; sourceTree = "<group>"; };
+		B0E41DDC235FD3230071605D /* WebServiceConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceConfigViewController.swift; sourceTree = "<group>"; };
+		B0E41DDE235FD3B20071605D /* WebServiceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceConfig.swift; sourceTree = "<group>"; };
+		B0EF221F2353F3F10070365D /* Field Log.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Field Log.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EF22222353F3F10070365D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0EF22242353F3F10070365D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B0EF22262353F3F10070365D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +39,7 @@
 		B0EF222B2353F3F20070365D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0EF222E2353F3F20070365D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B0EF22302353F3F20070365D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0EF22362353FFDB0070365D /* CECTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CECTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,7 +56,7 @@
 		B0EF22162353F3F10070365D = {
 			isa = PBXGroup;
 			children = (
-				B0EF22212353F3F10070365D /* CollectingEventCompanio */,
+				B0EF22212353F3F10070365D /* CollectingEventCompanion */,
 				B0EF22202353F3F10070365D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,31 +64,39 @@
 		B0EF22202353F3F10070365D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B0EF221F2353F3F10070365D /* CollectingEventCompanio.app */,
+				B0EF221F2353F3F10070365D /* Field Log.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B0EF22212353F3F10070365D /* CollectingEventCompanio */ = {
+		B0EF22212353F3F10070365D /* CollectingEventCompanion */ = {
 			isa = PBXGroup;
 			children = (
+				B0D6AE8E235CCE90005310FA /* AddEditObservationTableViewController.swift */,
 				B0EF22222353F3F10070365D /* AppDelegate.swift */,
 				B0EF22242353F3F10070365D /* SceneDelegate.swift */,
 				B0EF22262353F3F10070365D /* ViewController.swift */,
 				B0EF22282353F3F10070365D /* Main.storyboard */,
+				B0E41DDE235FD3B20071605D /* WebServiceConfig.swift */,
+				B0E41DDC235FD3230071605D /* WebServiceConfigViewController.swift */,
+				B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */,
+				B0BF5FBE235B8912001F50E3 /* AddBatchTableViewController.swift */,
+				B0CDE8C323569B4100611B58 /* Batch.swift */,
+				B0EF22362353FFDB0070365D /* CECTableViewController.swift */,
 				B0EF222B2353F3F20070365D /* Assets.xcassets */,
 				B0EF222D2353F3F20070365D /* LaunchScreen.storyboard */,
 				B0EF22302353F3F20070365D /* Info.plist */,
+				B0731A9F2355522A001A29ED /* Observations.swift */,
 			);
-			path = CollectingEventCompanio;
+			path = CollectingEventCompanion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B0EF221E2353F3F10070365D /* CollectingEventCompanio */ = {
+		B0EF221E2353F3F10070365D /* CollectingEventCompanion */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B0EF22332353F3F20070365D /* Build configuration list for PBXNativeTarget "CollectingEventCompanio" */;
+			buildConfigurationList = B0EF22332353F3F20070365D /* Build configuration list for PBXNativeTarget "CollectingEventCompanion" */;
 			buildPhases = (
 				B0EF221B2353F3F10070365D /* Sources */,
 				B0EF221C2353F3F10070365D /* Frameworks */,
@@ -82,9 +106,9 @@
 			);
 			dependencies = (
 			);
-			name = CollectingEventCompanio;
+			name = CollectingEventCompanion;
 			productName = CollectingEventCompanio;
-			productReference = B0EF221F2353F3F10070365D /* CollectingEventCompanio.app */;
+			productReference = B0EF221F2353F3F10070365D /* Field Log.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +126,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B0EF221A2353F3F10070365D /* Build configuration list for PBXProject "CollectingEventCompanio" */;
+			buildConfigurationList = B0EF221A2353F3F10070365D /* Build configuration list for PBXProject "Collecting Companion" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -115,7 +139,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B0EF221E2353F3F10070365D /* CollectingEventCompanio */,
+				B0EF221E2353F3F10070365D /* CollectingEventCompanion */,
 			);
 		};
 /* End PBXProject section */
@@ -138,9 +162,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0D6AE8F235CCE90005310FA /* AddEditObservationTableViewController.swift in Sources */,
+				B0CDE8C423569B4100611B58 /* Batch.swift in Sources */,
 				B0EF22272353F3F10070365D /* ViewController.swift in Sources */,
+				B0E41DDD235FD3230071605D /* WebServiceConfigViewController.swift in Sources */,
+				B0EF22372353FFDB0070365D /* CECTableViewController.swift in Sources */,
 				B0EF22232353F3F10070365D /* AppDelegate.swift in Sources */,
+				B0BF5FBF235B8912001F50E3 /* AddBatchTableViewController.swift in Sources */,
+				B0731AA02355522A001A29ED /* Observations.swift in Sources */,
+				B0BF5FC1235BB381001F50E3 /* ObservationsTableViewController.swift in Sources */,
 				B0EF22252353F3F10070365D /* SceneDelegate.swift in Sources */,
+				B0E41DDF235FD3B20071605D /* WebServiceConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,13 +318,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M372M9AL9A;
-				INFOPLIST_FILE = CollectingEventCompanio/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/CollectingEventCompanion/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.warrenhbrown.CollectingEventCompanio;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.warrenhbrown.CollectingEventCompanion;
+				PRODUCT_NAME = "Field Log";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -304,13 +336,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M372M9AL9A;
-				INFOPLIST_FILE = CollectingEventCompanio/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/CollectingEventCompanion/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.warrenhbrown.CollectingEventCompanio;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.warrenhbrown.CollectingEventCompanion;
+				PRODUCT_NAME = "Field Log";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -319,7 +351,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B0EF221A2353F3F10070365D /* Build configuration list for PBXProject "CollectingEventCompanio" */ = {
+		B0EF221A2353F3F10070365D /* Build configuration list for PBXProject "Collecting Companion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B0EF22312353F3F20070365D /* Debug */,
@@ -328,7 +360,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B0EF22332353F3F20070365D /* Build configuration list for PBXNativeTarget "CollectingEventCompanio" */ = {
+		B0EF22332353F3F20070365D /* Build configuration list for PBXNativeTarget "CollectingEventCompanion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B0EF22342353F3F20070365D /* Debug */,
