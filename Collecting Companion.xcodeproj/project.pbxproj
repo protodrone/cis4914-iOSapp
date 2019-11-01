@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B0731AA02355522A001A29ED /* Observations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0731A9F2355522A001A29ED /* Observations.swift */; };
+		B095B98D236BB5D0002375F8 /* BatchUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B095B98C236BB5D0002375F8 /* BatchUploadViewController.swift */; };
 		B0BF5FBF235B8912001F50E3 /* AddBatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF5FBE235B8912001F50E3 /* AddBatchTableViewController.swift */; };
 		B0BF5FC1235BB381001F50E3 /* ObservationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */; };
 		B0CDE8C423569B4100611B58 /* Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CDE8C323569B4100611B58 /* Batch.swift */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		B0731A9F2355522A001A29ED /* Observations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observations.swift; sourceTree = "<group>"; };
+		B095B98C236BB5D0002375F8 /* BatchUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchUploadViewController.swift; sourceTree = "<group>"; };
 		B0BF5FBE235B8912001F50E3 /* AddBatchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBatchTableViewController.swift; sourceTree = "<group>"; };
 		B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsTableViewController.swift; sourceTree = "<group>"; };
 		B0CDE8C323569B4100611B58 /* Batch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Batch.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				B0EF22242353F3F10070365D /* SceneDelegate.swift */,
 				B0EF22262353F3F10070365D /* ViewController.swift */,
 				B0EF22282353F3F10070365D /* Main.storyboard */,
+				B095B98C236BB5D0002375F8 /* BatchUploadViewController.swift */,
 				B0E41DDE235FD3B20071605D /* WebServiceConfig.swift */,
 				B0E41DDC235FD3230071605D /* WebServiceConfigViewController.swift */,
 				B0BF5FC0235BB381001F50E3 /* ObservationsTableViewController.swift */,
@@ -170,6 +173,7 @@
 				B0EF22232353F3F10070365D /* AppDelegate.swift in Sources */,
 				B0BF5FBF235B8912001F50E3 /* AddBatchTableViewController.swift in Sources */,
 				B0731AA02355522A001A29ED /* Observations.swift in Sources */,
+				B095B98D236BB5D0002375F8 /* BatchUploadViewController.swift in Sources */,
 				B0BF5FC1235BB381001F50E3 /* ObservationsTableViewController.swift in Sources */,
 				B0EF22252353F3F10070365D /* SceneDelegate.swift in Sources */,
 				B0E41DDF235FD3B20071605D /* WebServiceConfig.swift in Sources */,

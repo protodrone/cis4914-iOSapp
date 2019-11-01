@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="27Q-gm-fRT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="27Q-gm-fRT">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -193,7 +193,11 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem width="317" style="plain" systemItem="fixedSpace" id="H4Y-5Q-dPU"/>
-                        <barButtonItem title="Upload Batch" image="square.and.arrow.up" catalog="system" id="WRE-x3-BdM"/>
+                        <barButtonItem title="Upload Batch" image="square.and.arrow.up" catalog="system" id="WRE-x3-BdM">
+                            <connections>
+                                <action selector="uploadBatchTapped:" destination="xD6-FW-T8g" id="xdX-ew-8C8"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Observations" id="rN4-ar-ExM">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="gdo-Hn-XXA">
@@ -203,10 +207,85 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <segue destination="7QA-Nk-q7O" kind="presentation" identifier="UploadBatchSegue" id="6Wk-Ld-Owl"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XQM-mE-vh6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1112" y="873"/>
+        </scene>
+        <!--BatchUpload-->
+        <scene sceneID="J0G-fT-hUq">
+            <objects>
+                <viewController title="BatchUpload" id="7QA-Nk-q7O" customClass="BatchUploadViewController" customModule="Field_Log" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pS8-nI-CLC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="eMA-eN-TBD">
+                                <rect key="frame" x="188.5" y="200" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading Batch" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pUE-xM-0np">
+                                <rect key="frame" x="15" y="75" width="384" height="41"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Results" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zC-10-eTM">
+                                <rect key="frame" x="15" y="262" width="384" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Batch Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GPg-wy-VLI">
+                                <rect key="frame" x="15" y="141" width="384" height="34"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oca-eG-5WG">
+                                <rect key="frame" x="15" y="316" width="384" height="36"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissButtonTapped:" destination="7QA-Nk-q7O" eventType="touchUpInside" id="1XO-ON-OWZ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="eMA-eN-TBD" firstAttribute="centerX" secondItem="pS8-nI-CLC" secondAttribute="centerX" id="0Xl-Vv-kjb"/>
+                            <constraint firstItem="1zC-10-eTM" firstAttribute="leading" secondItem="kOf-j5-PuI" secondAttribute="leading" constant="15" id="6uo-e6-kpr"/>
+                            <constraint firstItem="GPg-wy-VLI" firstAttribute="leading" secondItem="kOf-j5-PuI" secondAttribute="leading" constant="15" id="DtL-Ee-E0G"/>
+                            <constraint firstItem="kOf-j5-PuI" firstAttribute="trailing" secondItem="Oca-eG-5WG" secondAttribute="trailing" constant="15" id="QNI-bg-9Ek"/>
+                            <constraint firstItem="1zC-10-eTM" firstAttribute="top" secondItem="eMA-eN-TBD" secondAttribute="bottom" constant="25" id="QgQ-ot-xah"/>
+                            <constraint firstItem="Oca-eG-5WG" firstAttribute="leading" secondItem="kOf-j5-PuI" secondAttribute="leading" constant="15" id="bGa-cJ-KVw"/>
+                            <constraint firstItem="Oca-eG-5WG" firstAttribute="top" secondItem="1zC-10-eTM" secondAttribute="bottom" constant="30" id="g2W-t9-UQi"/>
+                            <constraint firstItem="kOf-j5-PuI" firstAttribute="trailing" secondItem="1zC-10-eTM" secondAttribute="trailing" constant="15" id="gAW-vw-1Is"/>
+                            <constraint firstItem="pUE-xM-0np" firstAttribute="top" secondItem="kOf-j5-PuI" secondAttribute="top" constant="75" id="gT8-CQ-tSM"/>
+                            <constraint firstItem="GPg-wy-VLI" firstAttribute="top" secondItem="pUE-xM-0np" secondAttribute="bottom" constant="25" id="ick-GK-aS2"/>
+                            <constraint firstItem="kOf-j5-PuI" firstAttribute="trailing" secondItem="GPg-wy-VLI" secondAttribute="trailing" constant="15" id="tGV-uh-AYw"/>
+                            <constraint firstItem="pUE-xM-0np" firstAttribute="leading" secondItem="kOf-j5-PuI" secondAttribute="leading" constant="15" id="vpf-tw-CrD"/>
+                            <constraint firstItem="kOf-j5-PuI" firstAttribute="trailing" secondItem="pUE-xM-0np" secondAttribute="trailing" constant="15" id="xXl-8y-gQ0"/>
+                            <constraint firstItem="eMA-eN-TBD" firstAttribute="top" secondItem="GPg-wy-VLI" secondAttribute="bottom" constant="25" id="ybu-6V-bdn"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="kOf-j5-PuI"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="sva-ae-zvy"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="eMA-eN-TBD" id="aIT-oR-eV8"/>
+                        <outlet property="batchNameLabel" destination="GPg-wy-VLI" id="AcN-En-hap"/>
+                        <outlet property="dismissButton" destination="Oca-eG-5WG" id="g4Q-nw-3fd"/>
+                        <outlet property="resultsLabel" destination="1zC-10-eTM" id="7R2-gs-ZlD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2er-cd-mFw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1951" y="873"/>
         </scene>
         <!--Add Edit Observation Table View Controller-->
         <scene sceneID="TFZ-RJ-ZMo">
@@ -539,7 +618,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1886" y="873"/>
+            <point key="canvasLocation" x="1951" y="145"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ZmJ-bW-TcE">
@@ -670,16 +749,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FieldLog512" translatesAutoresizingMaskIntoConstraints="NO" id="BLc-Ug-EqI">
-                                <rect key="frame" x="0.0" y="76" width="414" height="1024"/>
+                                <rect key="frame" x="0.0" y="76" width="414" height="512"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Field Log" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4e1-HD-n7t">
-                                <rect key="frame" x="0.0" y="1120" width="414" height="42"/>
+                                <rect key="frame" x="0.0" y="608" width="414" height="42"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <color key="textColor" red="0.76471108200000004" green="0.76469653839999996" blue="0.76470643279999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Tarlington Project™" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dng-C1-fR1">
-                                <rect key="frame" x="0.0" y="1182" width="414" height="21"/>
+                                <rect key="frame" x="0.0" y="670" width="414" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.76471108200000004" green="0.76469653839999996" blue="0.76470643279999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
