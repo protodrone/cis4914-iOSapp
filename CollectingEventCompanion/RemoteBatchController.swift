@@ -98,19 +98,24 @@ class RemoteBatchController {
         let jsonData = try? jsonEncoder.encode(observation)
         request.httpBody = jsonData
         let task = URLSession.shared.dataTask(with: request) { (data,response, error) in
-            if let data = data, let response = response {
-                let jsonDecoder = JSONDecoder()
-                do {
-                    let createdObservation = try jsonDecoder.decode(RemoteObservation.self, from: data)
-                    let httpResponse = response as? HTTPURLResponse
-                    completion(httpResponse?.statusCode, createdObservation.id)
-                } catch {
-                    print (error)
+            if let data = data, let response = response as? HTTPURLResponse {
+                if response.statusCode == 201 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        let jsonDictionary = json as! [String: Any]
+                        let createdId = jsonDictionary["id"] as? Int
+                        completion(response.statusCode, createdId)
+                    } catch {
+                        print ("createRemoteObservation JSONSerializer threw: \(error)")
+                        completion(nil, nil)
+                    }
+                } else {
+                    print("createRemoteObservation received status code: \(response.statusCode)")
                     completion(nil, nil)
                 }
-                
             } else {
                 print("No response and data from createRemoteObservation")
+                completion(nil, nil)
             }
         }
         task.resume()

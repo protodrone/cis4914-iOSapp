@@ -49,7 +49,25 @@ class BatchUploadViewController: UIViewController {
         var imagesToUpload = [String: Int]()
         // Add Observations and build image upload dictionary
         for observation in batch.observations {
-            let remoteObservation = RemoteObservation(id: nil, upload_batch: remoteBatchId, observation_name: observation.name, lattitude: observation.lattitude, longitude: observation.longitude, gps_datum: observation.gpsDatum, Text1: nil, Text2: nil, Text3: nil, Int1: nil, Int2: nil, Int3: nil, notes: observation.notes)
+            var commonName: String? = nil
+            if let cname = observation.commonName  {
+                if cname.count > 0 {
+                    commonName = cname
+                }
+            }
+            var gps_datum: String? = nil
+            if let gpsDatum = observation.gpsDatum {
+                if gpsDatum.count > 0 {
+                    gps_datum = gpsDatum
+                }
+            }
+            var notes: String? = nil
+            if let observationNotes = observation.notes {
+                if observationNotes.count > 0 {
+                    notes = observationNotes
+                }
+            }
+            let remoteObservation = RemoteObservation(id: nil, upload_batch: remoteBatchId, observation_name: observation.name, lattitude: observation.lattitude, longitude: observation.longitude, gps_datum: gps_datum, Text1: commonName, Text2: nil, Text3: nil, Int1: nil, Int2: nil, Int3: nil, notes: notes)
             RemoteBatchController.shared.createRemoteObservation(forRemoteObservation: remoteObservation) { (statusCode, createdId) in
                 DispatchQueue.main.async {
                     if let createdId = createdId {
@@ -61,7 +79,7 @@ class BatchUploadViewController: UIViewController {
                             print("failed to unwrap imageUUIDString")
                         }
                     } else {
-                        self.resultsLabel.text! += "\nUh oh. failed to add \(observation.name)"
+                        self.resultsLabel.text! += "\nUh oh. \(observation.name) failed upload"
                     }
                 }
             }
