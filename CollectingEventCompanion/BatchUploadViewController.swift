@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class BatchUploadViewController: UIViewController {
     @IBOutlet weak var batchNameLabel: UILabel!
@@ -46,7 +47,6 @@ class BatchUploadViewController: UIViewController {
     
     func uploadObservations(forRemoteBatchId remoteBatchId: Int) {
         guard let batch = self.batch else { print("no batch to upload"); return }
-        var imagesToUpload = [String: Int]()
         // Add Observations and build image upload dictionary
         for observation in batch.observations {
             var commonName: String? = nil
@@ -73,8 +73,7 @@ class BatchUploadViewController: UIViewController {
                     if let createdId = createdId {
                         self.resultsLabel.text! += "\nUploaded: \(observation.name) Id: \(createdId)"
                         if let uuid = observation.imageUUIDString {
-                            imagesToUpload[uuid] = createdId
-                            print("\(uuid) : \(createdId)")
+                            self.uploadImage(withUUID: uuid, forObservation: createdId)
                         } else {
                             print("failed to unwrap imageUUIDString")
                         }
@@ -84,10 +83,56 @@ class BatchUploadViewController: UIViewController {
                 }
             }
         }
-        // Upload Images
-        print("image count: \(imagesToUpload.count)")
-        print(imagesToUpload)
     }
+    
+    var imgageDirectoryURL: URL {
+        get {
+            let imageDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            return imageDirectoryURL
+        }
+        
+    }
+    
+    // Alomofire upload multipart form data example
+    func uploadImage(withUUID uuidString: String, forObservation observationId: Int) {
+        self.resultsLabel.text! += "\nStarting image upload for \(observationId)"
+        print("upload request for \(uuidString) to observation \(observationId)")
+        let fileURL = imgageDirectoryURL.appendingPathComponent(uuidString).appendingPathExtension("png")
+        var imageData = Data()
+        do {
+            imageData = try Data(contentsOf: fileURL)
+        } catch {
+            print("Error loading image: \(error)")
+            print("fileURL: \(fileURL)")
+        }
+        guard let base64LoginString = RemoteBatchController.shared.base64LoginString else { print("need login string"); return }
+        let headers = ["Authorization": "Basic \(base64LoginString)"]
+        
+        Alamofire.upload(multipartFormData: { multipart in
+            multipart.append("\(observationId)".data(using: .utf8)!, withName :"observation")
+            multipart.append("\(uuidString)".data(using: .utf8)!, withName: "image_name")
+            multipart.append(imageData, withName: "image", fileName: "\(uuidString).png", mimeType: "image/png")
+        }, to: "https://tarlington.xyz/api/image", method: .post, headers: headers) { encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                print("case .success")
+                upload.response { answer in
+                    let statusCode = answer.response?.statusCode
+                    print("Image \(uuidString) updload statusCode: \(statusCode!)")
+                    self.resultsLabel.text! += "\nFinished image upload for \(observationId)"
+                    
+                }
+                upload.uploadProgress { progress in
+                    //call progress callback here if you need it
+                }
+            case .failure(let encodingError):
+                print("case .failure")
+                print("multipart upload encodingError: \(encodingError)")
+            }
+        }
+        
+    }
+    
 
     /*
     // MARK: - Navigation
