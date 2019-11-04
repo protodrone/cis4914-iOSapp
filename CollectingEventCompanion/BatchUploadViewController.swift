@@ -14,14 +14,19 @@ class BatchUploadViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var resultsLabel: UILabel!
     @IBOutlet weak var dismissButton: UIButton!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var batch: Batch?
+    var imageCounter: Int = 0
+    var observationCounter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dismissButton.layer.cornerRadius = 5.0
         batchNameLabel.text = batch?.name
+        observationCounter = (batch?.observations.count)!
         uploadBatch()
+        
     }
     
     @IBAction func dismissButtonTapped(_ sender: Any) {
@@ -72,7 +77,9 @@ class BatchUploadViewController: UIViewController {
                 DispatchQueue.main.async {
                     if let createdId = createdId {
                         self.resultsLabel.text! += "\nUploaded: \(observation.name) Id: \(createdId)"
+                        self.observationCounter -= 1
                         if let uuid = observation.imageUUIDString {
+                            self.imageCounter += 1
                             self.uploadImage(withUUID: uuid, forObservation: createdId)
                         } else {
                             print("failed to unwrap imageUUIDString")
@@ -82,6 +89,12 @@ class BatchUploadViewController: UIViewController {
                     }
                 }
             }
+        }
+        if observationCounter == 0 && imageCounter == 0 {
+            activityIndicator.stopAnimating()
+            dismissButton.isEnabled = true
+            dismissButton.isHidden = false
+            
         }
     }
     
@@ -119,8 +132,13 @@ class BatchUploadViewController: UIViewController {
                 upload.response { answer in
                     let statusCode = answer.response?.statusCode
                     print("Image \(uuidString) updload statusCode: \(statusCode!)")
+                    self.imageCounter -= 1
                     self.resultsLabel.text! += "\nFinished image upload for \(observationId)"
-                    
+                    if self.observationCounter == 0 && self.imageCounter == 0 {
+                        self.activityIndicator.stopAnimating()
+                        self.dismissButton.isEnabled = true
+                        self.dismissButton.isHidden = false
+                    }
                 }
                 upload.uploadProgress { progress in
                     //call progress callback here if you need it
