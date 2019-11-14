@@ -262,6 +262,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="dismissButtonTapped:" destination="7QA-Nk-q7O" eventType="touchUpInside" id="1XO-ON-OWZ"/>
+                                                    <segue destination="uJ6-1i-L4t" kind="unwind" identifier="returnFromBatchUploadSegue" unwindAction="unwindAddEditObservationViewcontrollerWithSegue:" id="3os-7j-yH7"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -297,6 +298,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2er-cd-mFw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="uJ6-1i-L4t" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1950.7246376811595" y="872.54464285714278"/>
         </scene>
@@ -812,6 +814,6 @@
         <image name="trash" catalog="system" width="60" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Wmr-zC-Egm"/>
+        <segue reference="gam-Rf-0Tx"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -132,21 +132,24 @@ class ObservationsTableViewController: UITableViewController {
     }
     
     @IBAction func unwindAddEditObservationViewcontroller(segue: UIStoryboardSegue) {
-        guard segue.identifier == "saveObservationUnwind",
-            let sourceViewController = segue.source as? AddEditObservationTableViewController,
-            let observation = sourceViewController.observation else { return }
-        
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            // Udpate existing observation
-            batches[batchIndex].observations[selectedIndexPath.row] = observation
-            tableView.reloadRows(at: [selectedIndexPath], with: .fade)
-            Batch.saveToFile(batches: batches)
-        } else {
-            // Insert new observation
-            let newIndexPath = IndexPath(row: batches[batchIndex].observations.count, section: 0)
-            batches[batchIndex].observations.append(observation)
-            tableView.insertRows(at: [newIndexPath], with: .fade)
-            Batch.saveToFile(batches: batches)
+        if segue.identifier == "saveObservationUnwind" {
+            guard let sourceViewController = segue.source as? AddEditObservationTableViewController,
+                let observation = sourceViewController.observation else { return }
+            
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                // Udpate existing observation
+                batches[batchIndex].observations[selectedIndexPath.row] = observation
+                tableView.reloadRows(at: [selectedIndexPath], with: .fade)
+                Batch.saveToFile(batches: batches)
+            } else {
+                // Insert new observation
+                let newIndexPath = IndexPath(row: batches[batchIndex].observations.count, section: 0)
+                batches[batchIndex].observations.append(observation)
+                tableView.insertRows(at: [newIndexPath], with: .fade)
+                Batch.saveToFile(batches: batches)
+            }
+        } else if segue.identifier == "returnFromBatchUploadSegue" {
+            
         }
     }
 

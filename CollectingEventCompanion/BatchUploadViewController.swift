@@ -30,7 +30,7 @@ class BatchUploadViewController: UIViewController {
     }
     
     @IBAction func dismissButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "returnFromBatchUploadSegue", sender: nil)
     }
     
     func uploadBatch() {
@@ -118,14 +118,15 @@ class BatchUploadViewController: UIViewController {
             print("Error loading image: \(error)")
             print("fileURL: \(fileURL)")
         }
-        guard let base64LoginString = RemoteBatchController.shared.base64LoginString else { print("need login string"); return }
+        guard let base64LoginString = RemoteBatchController.shared.base64LoginString, let uploadURL = RemoteBatchController.shared.baseURL?.appendingPathComponent("image") else { print("need login string"); return }
         let headers = ["Authorization": "Basic \(base64LoginString)"]
+        
         
         Alamofire.upload(multipartFormData: { multipart in
             multipart.append("\(observationId)".data(using: .utf8)!, withName :"observation")
             multipart.append("\(uuidString)".data(using: .utf8)!, withName: "image_name")
             multipart.append(imageData, withName: "image", fileName: "\(uuidString).png", mimeType: "image/png")
-        }, to: "https://tarlington.xyz/api/image", method: .post, headers: headers) { encodingResult in
+        }, to: uploadURL, method: .post, headers: headers) { encodingResult in
             switch encodingResult {
             case .success(let upload, _, _):
                 print("case .success")
