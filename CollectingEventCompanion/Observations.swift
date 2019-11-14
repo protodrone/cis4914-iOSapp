@@ -16,11 +16,11 @@ class Observation: Codable {
     var genus: String?
     var species: String?
     var notes: String?
-    private var validatedLattitude: Float?
-    private var validatedLongitude: Float?
+    private var validatedLattitude: Double?
+    private var validatedLongitude: Double?
     var imageUUIDString: String?
     
-    var lattitude: Float? {
+    var lattitude: Double? {
         get {
             return self.validatedLattitude
         }
@@ -36,7 +36,7 @@ class Observation: Codable {
         }
     }
     
-    var longitude: Float? {
+    var longitude: Double? {
         get {
             return validatedLongitude
         }
@@ -51,7 +51,7 @@ class Observation: Codable {
         }
     }
     
-    init(name: String, gpsDatum: String?, commonName: String?, genus: String?, species: String?, notes: String?, lattitude: Float?, longitude: Float?, imageUUIDString: String?) {
+    init(name: String, gpsDatum: String?, commonName: String?, genus: String?, species: String?, notes: String?, lattitude: Double?, longitude: Double?, imageUUIDString: String?) {
         self.name = name
         self.gpsDatum = gpsDatum
         self.commonName = commonName

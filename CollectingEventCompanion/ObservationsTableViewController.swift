@@ -13,11 +13,6 @@ class ObservationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44.0
         navigationItem.title = batches[batchIndex].name
@@ -26,6 +21,18 @@ class ObservationsTableViewController: UITableViewController {
     @IBAction func editButtonTapped(_ sender: Any) {
         let tableviewEditingMode = tableView.isEditing
         tableView.setEditing(!tableviewEditingMode, animated: true)
+    }
+    
+    @IBAction func uploadBatchTapped(_ sender: Any) {
+        let alert = UIAlertController(title: "Confirm Batch Upload", message: "Please ensure a stable data connection.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Upload", style: .default) { action in
+            self.performSegue(withIdentifier: "UploadBatchSegue", sender: nil)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+        
+        
+        
     }
     
     var batchIndex: Int = 0
@@ -118,30 +125,32 @@ class ObservationsTableViewController: UITableViewController {
             let observation = batches[batchIndex].observations[indexPath.row]
             let addEditObservationTableViewController = segue.destination as! AddEditObservationTableViewController
             addEditObservationTableViewController.observation = observation
-            
+        } else if segue.identifier == "UploadBatchSegue" {
+            let batchUploadController =  segue.destination as! BatchUploadViewController
+            batchUploadController.batch = batches[batchIndex]
         }
     }
     
     @IBAction func unwindAddEditObservationViewcontroller(segue: UIStoryboardSegue) {
-        guard segue.identifier == "saveObservationUnwind",
-            let sourceViewController = segue.source as? AddEditObservationTableViewController,
-            let observation = sourceViewController.observation else { return }
-        
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            // Udpate existing observation
-            batches[batchIndex].observations[selectedIndexPath.row] = observation
-            tableView.reloadRows(at: [selectedIndexPath], with: .fade)
-            Batch.saveToFile(batches: batches)
-        } else {
-            // Insert new observation
-            let newIndexPath = IndexPath(row: batches[batchIndex].observations.count, section: 0)
-            batches[batchIndex].observations.append(observation)
-            tableView.insertRows(at: [newIndexPath], with: .fade)
-            Batch.saveToFile(batches: batches)
+        if segue.identifier == "saveObservationUnwind" {
+            guard let sourceViewController = segue.source as? AddEditObservationTableViewController,
+                let observation = sourceViewController.observation else { return }
+            
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                // Udpate existing observation
+                batches[batchIndex].observations[selectedIndexPath.row] = observation
+                tableView.reloadRows(at: [selectedIndexPath], with: .fade)
+                Batch.saveToFile(batches: batches)
+            } else {
+                // Insert new observation
+                let newIndexPath = IndexPath(row: batches[batchIndex].observations.count, section: 0)
+                batches[batchIndex].observations.append(observation)
+                tableView.insertRows(at: [newIndexPath], with: .fade)
+                Batch.saveToFile(batches: batches)
+            }
+        } else if segue.identifier == "returnFromBatchUploadSegue" {
+            
         }
-        
-       
-        
     }
 
 }

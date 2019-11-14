@@ -253,13 +253,13 @@ class AddEditObservationTableViewController: UITableViewController, UIImagePicke
             if let gps = gpsDatumTextField.text {
                 gpsDatum = gps
             }
-            var lattitude: Float?
+            var lattitude: Double?
             if let lat = lattitudeTextField.text {
-                lattitude = Float(lat)
+                lattitude = Double(lat)
             }
-            var longitude: Float?
+            var longitude: Double?
             if let long = longitudeTextField.text {
-                longitude = Float(long)
+                longitude = Double(long)
             }
             var commonName: String?
             if let cn = commonNameTextField.text {
