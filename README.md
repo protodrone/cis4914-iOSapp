@@ -28,6 +28,7 @@ The Tarlington Project&trade; was developed by [Warren H. Brown](http://warrenhb
 The author wishes to thank [Dr. Peter J. Dobbins](https://www.cise.ufl.edu/dobbins-peter "Peter J. Dobbins Faculty Website") for for his patience, guidance, wisdom, early morning schedule, and academic encouragement. Additional thanks to the [Florida Museum of Natural History](https://floridamuseum.ufl.edu "Florida Museum of Natural History") Collection Managers, Ichthyology Collection Manager [Robert H. Robins](https://www.floridamuseum.ufl.edu/museum-voices/rob-robins/ "Robert H. Robin's staff page") for his design input and agreement to beta test the app in early 2020, and to Dr. Scott A. Wilson for his support and encouragement.
 
 # Technical
+Collecting Companion Fild Log is written in Swift 5.0 and targets the Universal Device Family. It presumes iOS 13+.
 
 # Project Website
 The official project website is [https://tarlington.xyz](https://tarlington.xyz) and includes links to all
